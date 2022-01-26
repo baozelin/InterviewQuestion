@@ -19,23 +19,7 @@ public class TokenBucket {
         this.capaciy = capaciy;
         this.timestamp = System.currentTimeMillis();
     }
-    //multithreaded function
-    void get1(int amount) throws InterruptedException {
-        long ct = System.currentTimeMillis();
-        tokens += (System.currentTimeMillis() - timestamp) / 1000 * refreshrate;
 
-        tokens = Math.min(capaciy, tokens);
-
-        if (tokens == 0) {
-            Thread.sleep(1000);
-        } else {
-            tokens--;
-        }
-        timestamp = System.currentTimeMillis();
-
-        System.out.println(
-                "Granting " + Thread.currentThread().getName() + " token at " + (System.currentTimeMillis() / 1000));
-    }
 
     void get(int amount) throws InterruptedException {
         synchronized (this){

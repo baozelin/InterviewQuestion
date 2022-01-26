@@ -66,7 +66,8 @@ public class highest_minimum_sharpness {
         int[][] arr = {{5,7,2},
                         {7,5,7},
                         {9,1,5}};
-        int[][] arr2 = {{1,2,3,9},{8,6,10,8},{9,4,11,12}};
+
+        int[][] arr2 = {{5,4,6},{1,2,10},{9,4,11}};
         System.out.println(arr[0][1]);
 
         System.out.println(h.walk(arr));

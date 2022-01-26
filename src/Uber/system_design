@@ -1,0 +1,4 @@
+Drivers upload their locations every second. Design a system that takes data and allows us to serve a heatmap of their locations. There are two specific product use cases we want to solve for.
+
+Requirement 1 We want to build a tool for our operations folks. They need to monitor the health of their city in real time. We need to serve the last 20 minutes of data for this tool. We want to split up the data into one minute buckets for each of those 20 minutes (thus yielding 20 different sets of data we can visualize).
+Requirement 2 We want to expose this data for consumption by cities and research institutions. Since it will be used for research purposes, we do not need data in real time. The data need only be available after 24 hours. Furthermore, we will summarize the data over the hour (rather than the minute above) and this data can only be requested in full hour increments (12:00-16:00 but not 12:05-16:05)
