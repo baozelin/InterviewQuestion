@@ -1,0 +1,157 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+/*
+#1 Auction(item_id, created_time, expiration_time)
+#2 Bid(item_id, bid_price, created_time)
+
+AuctionProcessor
+
+#3 AuctionResult(item_id, max_bid_price, num_bids)
+
+void onAuction(Auction auction);
+void onBid(Bid bid)
+List<AuctionResult> output(long currentTime)
+
+Auction("a", 0, 5)
+Bid("a", 1.5, 1)
+Bid("a", 3, 3)
+AuctionResult("a", 3, 2)
+
+Bid("a", 1.5, 6).
+
+
+
+AuctionResult("a", 3, 2)
+
+
+//
+hashmap<id, int[]{start, end} :  itemamp  id : time window
+hashmap<id, Node{max, count}.     bmap:   id: maxprice, count
+
+
+void onBid(Bid bid)
+bid: "a", time -<-{start, end}, -->
+
+
+loop in map: ---> id
+*/
+
+//#1 Auction(item_id, created_time, expiration_time)
+
+
+public class Solution {
+
+    HashMap<String, int[]> idmap;   //. id--> time window{start, end}
+    HashMap<String, int[]> bidmap;  // id --> {maxprice, count}
+
+
+    public Solution(){
+        idmap = new HashMap<>();
+        bidmap = new HashMap<>();
+    }
+
+
+    //
+    void onAuction(Auction auction){
+        String id = auction.item_id;
+        int start = auction.created_time;
+        int end = auction.expiration_time;
+
+        if(!idmap.containsKey(id)){
+            idmap.put(id, new int[]{start, end});
+
+        }
+       // idmap.get(id)[0] = start;
+        //idmap.get(id)[1] = end;
+
+    }
+
+    ////#2 Bid(item_id, bid_price, created_time)
+    void onBid(Bid bid){
+        String id = bid.item_id;
+        int price = bid.bid_price;
+        int created_time = bid.created_time;
+
+        //not exist
+        if(!idmap.containsKey(id)){
+            System.out.println("wrong bid id");
+            return;
+        }
+
+
+        if(!bidmap.containsKey(id)){
+            bidmap.put(id, new int[]{-1,-1});  //max, count
+        }
+
+        int[] timewindow = idmap.get(id);
+
+        //curr time in time window
+        if(created_time <= timewindow[1] && created_time > timewindow[0]){
+
+            //updata bidmap
+            //max price
+            bidmap.get(id)[0] = Math.max(bidmap.get(id)[0], price);
+            //count++;
+            bidmap.get(id)[1]++;
+
+        }
+
+
+
+
+    }
+
+    //AuctionResult("a", 3, 2). id, max, count
+    List<AuctionResult> output(long currentTime){
+        List<AuctionResult> res = new ArrayList<>();
+        if(currentTime <= 0) return res;
+
+        //loop in idmap
+        for(String id: idmap.keySet()){
+            int end = idmap.get(id)[1];
+
+            //not expriatino
+            if(end > currentTime){
+                continue;
+            }
+
+            //exist in idmap, not no bid in bidmap
+            if(!bidmap.containsKey(id)){
+
+                res.add(new AuctionResult(id, 0, 0));
+                continue;
+            }
+
+            int maxprice = bidmap.get(id)[0];
+            int count = bidmap.get(id)[1];
+
+            res.add(new AuctionResult(id, maxprice, count));
+            //map
+            // idmap.remove(id);
+            // bidmap.remove(id);
+        }
+
+
+        return res;
+
+
+    //3, 6, 9
+    }
+
+
+
+
+
+    public static void main(String args[] ) throws Exception {
+
+    }
+
+
+
+
+
+}
